@@ -1,3 +1,5 @@
+// vim: ts=3:sts=3:sw=3
+
 import scala.collection.mutable.ListBuffer
 import scala.util.Try
 import scala.io.Source
@@ -13,8 +15,7 @@ class BookList {
    var list = ListBuffer[Book]()
 
    def addBook(book : Book) : Unit = {
-      // write code to add the book to 'list'.
-      // hint: Use the list add (+=) method
+      list += book
    }
 
    def getNumberOfBooks() : Int = list.length
@@ -22,32 +23,24 @@ class BookList {
       // using it for testing purposes
 
    def printList() : Unit = {
-      // write code to printList()
-      // you should also show how to use the method in your main
+      val str: String = list map { (b: Book) =>
+         b.title + " by " + b.author + " in " + b.year
+      } reduceLeft { (acc: String, x: String) =>
+         acc + "\n" + x
+      }
+      println(str)
    }
 
    def getTitlesByAuthor(author : String) : ListBuffer[String] = {
-      val byAuthorList = ListBuffer[String]()
-      // return a list of all titles that are written by author
-
-
-      byAuthorList
+      list filter { (b: Book) => b.author == author } map { b => b.author }
    }
 
    def getTitlesContaining(substring : String) : ListBuffer[String] = {
-      val titles = ListBuffer[String]()
-      // return a list of all titles that contain a substring
-
-      titles
+      list filter { (b: Book) => b.title.contains(substring) } map { b => b.title }
    }
 
    def getBooksBetweenYears(firstYear : Int, lastYear : Int) : ListBuffer[Book] = {
-     
-      val betweenYearList = ListBuffer[Book]()
-      // get all books between two years
-
-
-      betweenYearList
+      list filter { b => firstYear <= b.year && b.year <= lastYear } 
    }
 
    def addFromFile(name : String) : Unit = {
@@ -72,3 +65,4 @@ class BookList {
       books.list foreach { n => list += n }
    }
 }
+
